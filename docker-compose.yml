@@ -14,9 +14,16 @@ services:
     volumes:
       - mysql_data:/var/lib/mysql
       - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "linux", "-predhat"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
 
 
   # Spring Boot Backend
+ # Spring Boot Backend
   backend:
     build:
       context: ./backend
@@ -31,8 +38,8 @@ services:
       - SPRING_JPA_HIBERNATE_DDL_AUTO=update
       - SPRING_JPA_SHOW_SQL=true
     depends_on:
-      - mysql
-
+      mysql:
+        condition: service_healthy
 
   # React Frontend
   frontend:

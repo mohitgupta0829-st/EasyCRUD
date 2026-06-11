@@ -1,9 +1,10 @@
--- Initialize the student_db database
-USE student_db;
+-- 1. create the user first
+CREATE USER 'linux'@'%' IDENTIFIED BY 'redhat';
 
--- Grant privileges to the user (if not already done by environment variables)
---GRANT ALL PRIVILEGES ON student_db.* TO 'linux'@'%' IDENTIFIED BY 'redhat';
---GRANT ALL PRIVILEGES ON student_db.* TO 'root'@'%' IDENTIFIED BY 'redhat';
+-- 2. grant privileges to the user
+GRANT ALL PRIVILEGES ON student_db.* TO 'linux'@'%';
 
--- Flush privileges to apply changes
-FLUSH PRIVILEGES; 
+use student_db;
+
+-- 3. Apply the changes
+FLUSH PRIVILEGES;
