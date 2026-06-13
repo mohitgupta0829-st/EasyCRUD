@@ -4,9 +4,16 @@ services:
     image: mariadb:latest
     ports:
       - 3306:3306
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
     environment:
       MYSQL_ROOT_PASSWORD: redhat
       MYSQL_DATABASE: student_db
+      
     volumes:
       - mariadb_data:/var/lib/mysql
 
@@ -16,8 +23,10 @@ services:
       dockerfile: Dockerfile
     ports:
       - 8080:8080
+
     depends_on:
-      - db
+      db:
+        condition: service_healthy
 
   frontend:
     build:
@@ -26,7 +35,8 @@ services:
     ports:
       - 80:80
     depends_on:
-      - backend
+      backend:
+        condition: service_healthy
 
 volumes:
   mariadb_data:
