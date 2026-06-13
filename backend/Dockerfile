@@ -1,4 +1,4 @@
-FROM mysql:8.0
+FROM maven:3.9.8-eclipse-temurin-17
 
 COPY . /opt/
 
